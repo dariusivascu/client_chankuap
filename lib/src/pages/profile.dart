@@ -7,6 +7,9 @@ void main() {
 }
 
 class Profile extends StatelessWidget {
+  final String? name;
+  Profile({Key? key, this.name}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,7 +37,7 @@ class Profile extends StatelessWidget {
               Align(
                 alignment: Alignment(0, -0.3),
                 child: Container(
-                  child: Text("Veronica",
+                  child: Text(name!,
                     textScaleFactor: 2,
                   ),
                 ),

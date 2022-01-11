@@ -270,8 +270,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   checkPassword() async {
-    Route route = MaterialPageRoute(builder: (context) => MyHomePage());
-    Navigator.pushReplacement(context, route);
+    // Route route = MaterialPageRoute(builder: (context) => MyHomePage());
+    // Navigator.pushReplacement(context, route);
     var client = http.Client();
     var url = 'https://wakerakka.herokuapp.com/';
     var endpoint = 'authenticate/';
@@ -284,7 +284,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (uriResponse.statusCode == 202) {
         save();
-        Route route = MaterialPageRoute(builder: (context) => MyHomePage());
+        Route route = MaterialPageRoute(builder: (context) => MyHomePage(username: _email,));
         Navigator.pushReplacement(context, route);
       }
       else {

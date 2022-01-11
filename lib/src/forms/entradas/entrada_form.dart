@@ -239,7 +239,7 @@ class _EntradaFormState extends State<EntradaForm> {
           //       //push entrada
           //       _validateInputs();
           //     });
-          Container();
+          // Container();
         },
         child: Icon(Icons.add),
         backgroundColor: Color(0xff073B3A),

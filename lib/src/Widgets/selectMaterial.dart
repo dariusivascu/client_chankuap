@@ -96,8 +96,7 @@ class _StepperPageState extends State<StepperPage> {
                 key: _formKey,
                 child: Column(children: <Widget>[
                   TypeAheadFormField(
-                    initialValue: this.name,
-                    onSaved: (value) => name = value ?? "",
+                    onSaved: (value) => this.name = value ?? "",
                     validator: (val) {
                       if(val!.isEmpty) return 'El nombre de Producto no '
                           'es bueno';
@@ -105,6 +104,7 @@ class _StepperPageState extends State<StepperPage> {
                     },
                     textFieldConfiguration: TextFieldConfiguration(
                       autofocus: true,
+                      controller: this._typeAheadController,
                       decoration: const InputDecoration(
                         labelText: 'Nombre de Producto',
                       ),

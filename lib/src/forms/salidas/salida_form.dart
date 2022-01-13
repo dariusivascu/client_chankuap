@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import '../product_list_form.dart';
 
-class SalidaForm extends StatefulWidget{
+class SalidaForm extends StatefulWidget {
   SalidaForm({Key? key, required this.trans}) : super(key: key);
 
   final SalidaOverview trans;
@@ -19,17 +19,18 @@ class SalidaForm extends StatefulWidget{
   _SalidaFormState createState() => _SalidaFormState();
 }
 
-
 class _SalidaFormState extends State<SalidaForm> {
-  final  _fbkey = new GlobalKey<FormState>();
+  final _fbkey = GlobalKey<FormState>();
 
   String _usario = "Isaac";
   String _fechaUno = "";
   String _fechaDos = "";
   String _cliente = "";
+  String _ciudad = "";
   String _transporte = "Carro";
 
   final nameFocusNode = FocusNode();
+  final ciudadFocusNode = FocusNode();
   final stepperPage = StepperPage();
   final productList = ProductListForm();
   late SalidaOverview trans;
@@ -40,60 +41,65 @@ class _SalidaFormState extends State<SalidaForm> {
   void initState() {
     this.trans = widget.trans;
     stepperPage.productos = productos;
-    productList.productos = productos;
+    productList.materiasPrimas = productos;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       appBar: FormAppBar(),
       body: SafeArea(
         top: false,
         bottom: false,
-        child: new Form(
+        child: Form(
           key: _fbkey,
           child: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             children: <Widget>[
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Container(
                 child: Text(
                   "Salida De Mercaderia - Ficha n°" +
                       widget.trans.trans_id.toString(),
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 18),
+                  style: const TextStyle(fontSize: 18),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               InputDatePickerFormField(
-                  initialDate: DateTime.parse(widget.trans.date),
-                  onDateSaved: (value) => {
-                    _fechaUno = value.toString()
-                  },
-                  firstDate: DateTime(2020, 1, 1),
-                  lastDate:  DateTime(2060, 1, 01)
-              ),
-              SizedBox(height: 10),
-              InputDatePickerFormField(
+                  fieldLabelText: 'Fecha 1',
                   initialDate: DateTime.now(),
-                  onDateSaved: (value) => {
-                    _fechaDos = value.toString()
-                  },
+                  onDateSaved: (value) => {_fechaUno = value.toString()},
                   firstDate: DateTime(2021, 1, 1),
-                  lastDate:  DateTime(2060, 1, 01)
-              ),
-              SizedBox(height: 10),
+                  lastDate: DateTime(2060, 1, 01)),
+              const SizedBox(height: 10),
+              InputDatePickerFormField(
+                  fieldLabelText: 'Fecha 2',
+                  initialDate: DateTime.now(),
+                  onDateSaved: (value) => {_fechaDos = value.toString()},
+                  firstDate: DateTime(2021, 1, 1),
+                  lastDate: DateTime(2060, 1, 01)),
+              const SizedBox(height: 10),
               FormBuilderDropdown(
-                  onSaved: (value) => _usario = value as String,
-                  decoration: const InputDecoration(labelText: 'Quien'),
-                  initialValue: 'Isaac',
-                  items: ['Isaac', 'Yollanda', 'Nube', 'Veronica', 'Anita']
-                      .map((quien) => DropdownMenuItem(
-                      value: quien,
-                      child: Text("$quien", textAlign: TextAlign.center)))
-                      .toList(), name: 'quien',),
-              SizedBox(height: 10),
+                onSaved: (value) => _usario = value as String,
+                decoration: const InputDecoration(labelText: 'Empleado/a'),
+                initialValue: 'Isaac',
+                items: [
+                  'Isaac',
+                  'Yollanda',
+                  'Nube',
+                  'Veronica',
+                  'Anita',
+                  'Ernesto'
+                ]
+                    .map((quien) => DropdownMenuItem(
+                        value: quien,
+                        child: Text("$quien", textAlign: TextAlign.center)))
+                    .toList(),
+                name: 'quien',
+              ),
+              const SizedBox(height: 10),
               TextFormField(
                 initialValue: this.widget.trans.cliente,
                 decoration: const InputDecoration(
@@ -117,21 +123,47 @@ class _SalidaFormState extends State<SalidaForm> {
                   FocusScope.of(context).requestFocus(nameFocusNode);
                 },
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
+              TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'Ciudad',
+                ),
+                inputFormatters: [LengthLimitingTextInputFormatter(30)],
+                validator: (city) {
+                  if (city!.isEmpty) {
+                    return 'El nombre de la ciudad es obligatorio';
+                  }
+                  return null;
+                },
+                onSaved: (ciudad) {
+                  _ciudad = ciudad!;
+                },
+                autofocus: true,
+                focusNode: ciudadFocusNode,
+                textInputAction: TextInputAction.next,
+                onTap: () {
+                  FocusScope.of(context).unfocus();
+                  FocusScope.of(context).requestFocus(ciudadFocusNode);
+                },
+              ),
+              const SizedBox(height: 10),
               FormBuilderDropdown(
-                  initialValue: "Carro",
-                  onSaved: (value) => _transporte = value as String,
-                  decoration: const InputDecoration(
-                    labelText: 'Medio de Transporte',
-                  ),
-                  items: ['Carro', 'Avion'].map((medio) => DropdownMenuItem(
-                      value: medio,
-                      child: Text("$medio", textAlign: TextAlign.center)))
-                      .toList(), name: 'medio',),
-              SizedBox(height: 10),
+                initialValue: "Carro",
+                onSaved: (value) => _transporte = value as String,
+                decoration: const InputDecoration(
+                  labelText: 'Medio de Transporte',
+                ),
+                items: ['Carro', 'Avion']
+                    .map((medio) => DropdownMenuItem(
+                        value: medio,
+                        child: Text("$medio", textAlign: TextAlign.center)))
+                    .toList(),
+                name: 'medio',
+              ),
+              const SizedBox(height: 10),
               Row(
                 children: [
-                  Expanded(
+                  const Expanded(
                     flex: 8,
                     child: Text("Materias Primas",
                         textAlign: TextAlign.center,
@@ -141,19 +173,19 @@ class _SalidaFormState extends State<SalidaForm> {
                     flex: 2,
                     child: IconButton(
                         iconSize: 20,
-                        icon: Icon(Icons.add),
+                        icon: const Icon(Icons.add),
                         onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => stepperPage),
-                        )),
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => stepperPage),
+                            )),
                   )
                 ],
               ),
               Container(
                   height: 300,
                   child: Padding(
-                      padding: EdgeInsets.fromLTRB(0, 10, 0, 15),
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 15),
                       child: productList)),
             ],
           ),
@@ -169,8 +201,8 @@ class _SalidaFormState extends State<SalidaForm> {
           //     });
           Container();
         },
-        child: Icon(Icons.add),
-        backgroundColor: Color(0xff073B3A),
+        child: const Icon(Icons.add),
+        backgroundColor: const Color(0xff073B3A),
       ),
     );
   }

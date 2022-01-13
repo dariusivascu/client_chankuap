@@ -172,7 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   )
                               ),
                               SizedBox(height: 30.0),
-                              _buildRememberMeCheckbox(),
+                              // _buildRememberMeCheckbox(),
                               _buildLoginBtn(),
                             ],
                           ),
@@ -186,37 +186,37 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildRememberMeCheckbox() {
-    return Container(
-      height: 20.0,
-      child: Row(
-        children: <Widget>[
-          Theme(
-            data: ThemeData(unselectedWidgetColor: Color(0xff073B3A)),
-            child: Checkbox(
-              value: _rememberMe,
-              checkColor: Color(0xff073B3A),
-              activeColor: Colors.white,
-              onChanged: (value) {
-                setState(() {
-                  _rememberMe = value!;
-                  print(value);
-                });
-              },
-            ),
-          ),
-          Text(
-            'Recuérdame',
-            style: TextStyle(
-              color: Color(0xff073B3A),
-              fontWeight: FontWeight.bold,
-              fontFamily: 'OpenSans',
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _buildRememberMeCheckbox() {
+  //   return Container(
+  //     height: 20.0,
+  //     child: Row(
+  //       children: <Widget>[
+  //         Theme(
+  //           data: ThemeData(unselectedWidgetColor: Color(0xff073B3A)),
+  //           child: Checkbox(
+  //             value: _rememberMe,
+  //             checkColor: Color(0xff073B3A),
+  //             activeColor: Colors.white,
+  //             onChanged: (value) {
+  //               setState(() {
+  //                 _rememberMe = value!;
+  //                 print(value);
+  //               });
+  //             },
+  //           ),
+  //         ),
+  //         Text(
+  //           'Recuérdame',
+  //           style: TextStyle(
+  //             color: Color(0xff073B3A),
+  //             fontWeight: FontWeight.bold,
+  //             fontFamily: 'OpenSans',
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildLoginBtn() {
     return Container(

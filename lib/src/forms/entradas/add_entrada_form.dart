@@ -45,7 +45,7 @@ class _AddEntradaFormState extends State<AddEntradaForm> {
   void initState() {
     super.initState();
     stepperPage.productos = productos;
-    productList.productos = productos;
+    productList.materiasPrimas = productos;
   }
 
   @override

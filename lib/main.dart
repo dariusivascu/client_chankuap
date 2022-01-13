@@ -1,13 +1,25 @@
 import 'package:client_chankuap/src/Widgets/app_icons.dart';
+import 'package:client_chankuap/src/globals.dart';
 import 'package:client_chankuap/src/pages/Export.dart';
 import 'package:client_chankuap/src/pages/login.dart';
 import 'package:client_chankuap/src/pages/profile.dart';
 import 'package:client_chankuap/src/pages/transactions.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    /// Providers are above [MyApp] instead of inside it, so that tests
+    /// can use [MyApp] while mocking the providers
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<MateriasProvider>(
+            create: (_) => MateriasProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -17,21 +29,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Wakerakka',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Chankuap application homepage'),
-    );
+        title: 'Wakerakka',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: LoginScreen());
   }
 }
 
@@ -58,10 +60,11 @@ class _MyHomePageState extends State<MyHomePage> {
   int _pageIndex = 0;
   final Transactions tran = Transactions();
   final Export exp = Export();
-  late Profile prof = Profile(name: widget.username,);
-  final LoginScreen login = LoginScreen();
+  late Profile prof = Profile(
+    name: widget.username,
+  );
 
-  Widget _showPage = new Transactions();
+  Widget _showPage = Transactions();
 
   // Widget _pageChooser(int page) {
   //   switch (page) {
@@ -83,13 +86,10 @@ class _MyHomePageState extends State<MyHomePage> {
     switch (page) {
       case 0:
         return tran;
-        break;
       case 1:
         return exp;
-        break;
       case 2:
         return prof;
-        break;
       default:
         return tran;
     }
@@ -100,8 +100,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: Container(
           child: Center(
-            child: _showPage,
-          )),
+        child: _showPage,
+      )),
       bottomNavigationBar: CurvedNavigationBar(
         index: _pageIndex,
         color: Color(0xff073B3A),

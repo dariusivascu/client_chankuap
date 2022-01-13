@@ -44,7 +44,7 @@ class _AddSalidaFormState extends State<AddSalidaForm> {
     super.initState();
     productList = new ProductListForm();
     stepperPage.productos = productos;
-    productList.productos = productos;
+    productList.materiasPrimas = productos;
   }
 
   @override

@@ -97,7 +97,7 @@ class _Salida extends State<Salida> {
                         var dialog = CustomAlertDialog(
                           title: "Eliminar la transacción",
                           message: "Estas seguro?",
-                          onPostivePressed: () {
+                          onPositivePressed: () {
                             _deleteSalida(index);
                           },
                           positiveBtnText: 'Si',

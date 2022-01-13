@@ -250,7 +250,7 @@ class _AddEntradaFormState extends State<AddEntradaForm> {
           var dialog = CustomAlertDialog(
             title: "Registrar la transacción",
             message: "Estas seguro?",
-            onPostivePressed: () {
+            onPositivePressed: () {
               //
             },
             positiveBtnText: 'Si',

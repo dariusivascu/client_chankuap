@@ -104,16 +104,16 @@ class _MyHomePageState extends State<MyHomePage> {
       )),
       bottomNavigationBar: CurvedNavigationBar(
         index: _pageIndex,
-        color: Color(0xff073B3A),
-        backgroundColor: Color(0xffEFEFEF),
-        buttonBackgroundColor: Color(0xff073B3A),
+        color: const Color(0xff073B3A),
+        backgroundColor: const Color(0xffEFEFEF),
+        buttonBackgroundColor: const Color(0xff073B3A),
         height: 50,
-        items: <Widget>[
+        items: const <Widget>[
           Icon(AppIcons.transaction, size: 25, color: Colors.white),
           Icon(AppIcons.storage, size: 25, color: Colors.white),
           Icon(AppIcons.entry, size: 25, color: Colors.white),
         ],
-        animationDuration: Duration(milliseconds: 200),
+        animationDuration: const Duration(milliseconds: 200),
         onTap: (int tappedIndex) {
           _pageIndex = tappedIndex;
           setState(() {

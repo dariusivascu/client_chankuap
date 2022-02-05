@@ -1,10 +1,7 @@
-import 'package:client_chankuap/src/pages/Salida.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../forms/entradas/add_entrada_form.dart';
 import '../forms/salidas/add_salida_form.dart';
-import '../pages/Entrada.dart';
 
 /// Set in the "add_bar.dart" component.
 /// When pressed, it will push the appropriate formula to the navigator.
@@ -20,8 +17,6 @@ class AddButton extends StatefulWidget {
 }
 
 class _AddButtonState extends State<AddButton> {
-  final Entrada entrada = Entrada();
-  final Salida salida = Salida();
   final AddSalidaForm _addSalidaForm = AddSalidaForm();
   final AddEntradaForm _addEntradaForm = AddEntradaForm();
 
@@ -33,9 +28,9 @@ class _AddButtonState extends State<AddButton> {
         if (widget.page == 1)
           Navigator.push(
             context,
-            MaterialPageRoute(
-                builder: (context) => _addEntradaForm),
+            MaterialPageRoute(builder: (context) => _addEntradaForm),
           ),
+
         /// 2 --> Salida
         if (widget.page == 2)
           Navigator.push(
@@ -45,13 +40,13 @@ class _AddButtonState extends State<AddButton> {
       },
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18.0),
-          side: BorderSide(color: Color(0xff073B3A))),
+          side: const BorderSide(color: Color(0xff073B3A))),
       child: Row(
-        children: <Widget>[
+        children: const <Widget>[
           Expanded(
               flex: 6,
               child:
-              Text("Anadir", style: TextStyle(color: Color(0xff073B3A)))),
+                  Text("Anadir", style: TextStyle(color: Color(0xff073B3A)))),
           Icon(Icons.add, color: Color(0xff073B3A)),
         ],
       ),

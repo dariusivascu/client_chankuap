@@ -34,9 +34,8 @@ class _StepperPageState extends State<StepperPage> {
   String name = "";
   late double cantidad;
   int unidad = 0;
-  String precio = "";
+  late double precio;
   String organico = "";
-  String comunidad = "";
   late List<Step> steps;
 
   @override
@@ -82,10 +81,11 @@ class _StepperPageState extends State<StepperPage> {
         onStepCancel: canCancel ? () => setState(() => --currentStep) : null,
         onStepContinue: () {
           setState(() {
-            if (currentStep < 0)
+            if (currentStep < 0) {
               currentStep++;
-            else
+            } else {
               _registerMateria();
+            }
           });
         });
   }
@@ -99,9 +99,10 @@ class _StepperPageState extends State<StepperPage> {
                   TypeAheadFormField(
                     onSaved: (value) => this.name = value ?? "",
                     validator: (val) {
-                      if (val!.isEmpty)
+                      if (val!.isEmpty) {
                         return 'El nombre de producto no '
                             'es bueno';
+                      }
                       return null;
                     },
                     textFieldConfiguration: TextFieldConfiguration(
@@ -129,13 +130,13 @@ class _StepperPageState extends State<StepperPage> {
                         labelText: 'Organico / Convencional'),
                     initialValue: "Organico",
                     onSaved: (value) => {
-                      if (value == 'Organico') organico = "O",
-                      if (value == 'Convencional') organico = "C"
+                      if (value == 'Organico') organico = "Organico",
+                      if (value == 'Convencional') organico = "Convencional"
                     },
                     items: ['Organico', 'Convencional']
                         .map((quien) => DropdownMenuItem(
                             value: quien,
-                            child: Text("$quien", textAlign: TextAlign.left)))
+                            child: Text(quien, textAlign: TextAlign.left)))
                         .toList(),
                     name: 'quien',
                   ),
@@ -184,8 +185,7 @@ class _StepperPageState extends State<StepperPage> {
                         //items: [1,2,3]
                         .map((unidad) => DropdownMenuItem(
                             value: unidad,
-                            child:
-                                Text("$unidad", textAlign: TextAlign.center)))
+                            child: Text(unidad, textAlign: TextAlign.center)))
                         .toList(),
                     name: 'unidad',
                   ),
@@ -196,13 +196,12 @@ class _StepperPageState extends State<StepperPage> {
                     keyboardType: TextInputType.number,
                     inputFormatters: [LengthLimitingTextInputFormatter(15)],
                     onSaved: (price) {
-                      precio = price!;
+                      precio = double.parse(price.toString());
                     },
                     validator: (val) {
                       if (val!.isEmpty) return 'Necesitas un precio';
                       return null;
                     },
-                    initialValue: '${this.precio}',
                     autofocus: true,
                     focusNode: PrecioFocusNode,
                     textInputAction: TextInputAction.next,
@@ -230,14 +229,13 @@ class _StepperPageState extends State<StepperPage> {
       _formKey.currentState!.save();
 
       try {
-        var price = int.parse(precio);
 
         /// todo schimba id aici sa nu fie FAKE
 
         List<Producto> materias =
             context.read<MateriasProvider>().materiasPrimas;
         materias.add(
-            Producto(1, name, cantidad, unidad, price, organico, comunidad));
+            Producto(1, name, cantidad, unidad, precio, organico));
 
         context.read<MateriasProvider>().materiasPrimas = materias;
 

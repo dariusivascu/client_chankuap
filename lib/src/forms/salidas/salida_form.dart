@@ -1,19 +1,17 @@
 import 'package:client_chankuap/src/Widgets/data_object.dart';
 import 'package:client_chankuap/src/Widgets/selectMaterial.dart';
 import 'package:client_chankuap/src/app_bars/form_app_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import '../product_list_form.dart';
 
 class SalidaForm extends StatefulWidget {
-  SalidaForm({Key? key, required this.trans}) : super(key: key);
+  SalidaForm({Key? key, required this.trans, required this.salidaTrans})
+      : super(key: key);
 
   final SalidaOverview trans;
-
-  // final int id;
+  final SalidaTrans salidaTrans;
 
   @override
   _SalidaFormState createState() => _SalidaFormState();
@@ -27,7 +25,6 @@ class _SalidaFormState extends State<SalidaForm> {
   String _fechaDos = "";
   String _cliente = "";
   String _ciudad = "";
-  String _transporte = "Carro";
 
   final nameFocusNode = FocusNode();
   final ciudadFocusNode = FocusNode();
@@ -67,119 +64,62 @@ class _SalidaFormState extends State<SalidaForm> {
                 ),
               ),
               const SizedBox(height: 10),
-              InputDatePickerFormField(
-                  fieldLabelText: 'Fecha 1',
-                  initialDate: DateTime.now(),
-                  onDateSaved: (value) => {_fechaUno = value.toString()},
-                  firstDate: DateTime(2021, 1, 1),
-                  lastDate: DateTime(2060, 1, 01)),
+              TextFormField(
+                style: const TextStyle(color: Color(0xff073B3A)),
+                decoration: const InputDecoration(labelText: 'Fecha 1'),
+                initialValue: widget.salidaTrans.fecha_uno,
+                enabled: false,
+              ),
               const SizedBox(height: 10),
-              InputDatePickerFormField(
-                  fieldLabelText: 'Fecha 2',
-                  initialDate: DateTime.now(),
-                  onDateSaved: (value) => {_fechaDos = value.toString()},
-                  firstDate: DateTime(2021, 1, 1),
-                  lastDate: DateTime(2060, 1, 01)),
+              TextFormField(
+                style: const TextStyle(color: Color(0xff073B3A)),
+                decoration: const InputDecoration(labelText: 'Fecha 2'),
+                initialValue: widget.salidaTrans.fecha_dos,
+                enabled: false,
+              ),
               const SizedBox(height: 10),
-              FormBuilderDropdown(
-                onSaved: (value) => _usario = value as String,
+              TextFormField(
+                style: const TextStyle(color: Color(0xff073B3A)),
                 decoration: const InputDecoration(labelText: 'Empleado/a'),
-                initialValue: 'Isaac',
-                items: [
-                  'Isaac',
-                  'Yollanda',
-                  'Nube',
-                  'Veronica',
-                  'Anita',
-                  'Ernesto'
-                ]
-                    .map((quien) => DropdownMenuItem(
-                        value: quien,
-                        child: Text("$quien", textAlign: TextAlign.center)))
-                    .toList(),
-                name: 'quien',
+                initialValue: _intToName(widget.salidaTrans.quien),
+                enabled: false,
               ),
               const SizedBox(height: 10),
               TextFormField(
-                initialValue: this.widget.trans.cliente,
-                decoration: const InputDecoration(
-                  labelText: 'Cliente',
-                ),
+                style: const TextStyle(color: Color(0xff073B3A)),
+                decoration: const InputDecoration(labelText: 'Cliente'),
                 inputFormatters: [LengthLimitingTextInputFormatter(30)],
-                validator: (userName) {
-                  if (userName!.isEmpty) {
-                    return 'El nombre del cliente es obligatorio';
-                  }
-                  return null;
-                },
-                onSaved: (cliente) {
-                  _cliente = cliente!;
-                },
-                autofocus: true,
-                focusNode: nameFocusNode,
-                textInputAction: TextInputAction.next,
-                onTap: () {
-                  FocusScope.of(context).unfocus();
-                  FocusScope.of(context).requestFocus(nameFocusNode);
-                },
+                initialValue: widget.salidaTrans.cliente,
+                enabled: false,
               ),
               const SizedBox(height: 10),
               TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Ciudad',
-                ),
+                style: const TextStyle(color: Color(0xff073B3A)),
+                decoration: const InputDecoration(labelText: 'Ciudad'),
                 inputFormatters: [LengthLimitingTextInputFormatter(30)],
-                validator: (city) {
-                  if (city!.isEmpty) {
-                    return 'El nombre de la ciudad es obligatorio';
-                  }
-                  return null;
-                },
-                onSaved: (ciudad) {
-                  _ciudad = ciudad!;
-                },
-                autofocus: true,
-                focusNode: ciudadFocusNode,
-                textInputAction: TextInputAction.next,
-                onTap: () {
-                  FocusScope.of(context).unfocus();
-                  FocusScope.of(context).requestFocus(ciudadFocusNode);
-                },
-              ),
-              const SizedBox(height: 10),
-              FormBuilderDropdown(
-                initialValue: "Carro",
-                onSaved: (value) => _transporte = value as String,
-                decoration: const InputDecoration(
-                  labelText: 'Medio de Transporte',
-                ),
-                items: ['Carro', 'Avion']
-                    .map((medio) => DropdownMenuItem(
-                        value: medio,
-                        child: Text("$medio", textAlign: TextAlign.center)))
-                    .toList(),
-                name: 'medio',
+                initialValue: widget.salidaTrans.ciudad,
+                enabled: false,
               ),
               const SizedBox(height: 10),
               Row(
-                children: [
-                  const Expanded(
+                children: const [
+                  Expanded(
                     flex: 8,
                     child: Text("Materias Primas",
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 18)),
                   ),
-                  Expanded(
-                    flex: 2,
-                    child: IconButton(
-                        iconSize: 20,
-                        icon: const Icon(Icons.add),
-                        onPressed: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => stepperPage),
-                            )),
-                  )
+                  // Expanded(
+                  //   flex: 2,
+                  //   child: IconButton(
+                  //       iconSize: 20,
+                  //       icon: const Icon(Icons.add),
+                  //       onPressed: () => Navigator.push(
+                  //             context,
+                  //             MaterialPageRoute(
+                  //                 builder: (context) => stepperPage),
+                  //           )),
+                  // )
                 ],
               ),
               Container(
@@ -191,27 +131,43 @@ class _SalidaFormState extends State<SalidaForm> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // confirmationDialog(context, "Estas seguro ?",
-          //     title: "Confirmacion",
-          //     // confirmationText: "Click here to confirmar",
-          //     positiveText: "Registrar", positiveAction: () {
-          //       _validateInputs();
-          //     });
-          Container();
-        },
-        child: const Icon(Icons.add),
-        backgroundColor: const Color(0xff073B3A),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     // confirmationDialog(context, "Estas seguro ?",
+      //     //     title: "Confirmacion",
+      //     //     // confirmationText: "Click here to confirmar",
+      //     //     positiveText: "Registrar", positiveAction: () {
+      //     //       _validateInputs();
+      //     //     });
+      //     Container();
+      //   },
+      //   child: const Icon(Icons.add),
+      //   backgroundColor: const Color(0xff073B3A),
+      // ),
     );
   }
 
-  void _validateInputs() {
-    if (_fbkey.currentState!.validate()) {
-//    If all data are correct then save data to out variables
-      _fbkey.currentState!.save();
-      Navigator.pop(context);
+  _intToName(int usario) {
+    switch (usario) {
+      case 0:
+        return 'Isaac';
+      case 1:
+        return 'Yollanda';
+      case 2:
+        return 'Nube';
+      case 3:
+        return 'Veronica';
+      case 4:
+        return 'Anita';
+      case 5:
+        return 'Ernesto';
     }
   }
+//   void _validateInputs() {
+//     if (_fbkey.currentState!.validate()) {
+// //    If all data are correct then save data to out variables
+//       _fbkey.currentState!.save();
+//       Navigator.pop(context);
+//     }
+//   }
 }

@@ -1,5 +1,4 @@
 import 'package:client_chankuap/src/buttons/add_button.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AddBar extends StatefulWidget {
@@ -9,7 +8,7 @@ class AddBar extends StatefulWidget {
 
   AddBar({Key? key, required this.icon, required this.title, required this.page}) : super(key: key);
 
-  _AddBarState createState() => new _AddBarState();
+  _AddBarState createState() => _AddBarState();
 }
 
 class _AddBarState extends State<AddBar> {
@@ -25,9 +24,9 @@ class _AddBarState extends State<AddBar> {
           Expanded(
             flex: 5,
             child: Text(widget.title,
-                style: TextStyle(color: Color(0xff073B3A), fontSize: 16)),
+                style: const TextStyle(color: Color(0xff073B3A), fontSize: 16)),
           ),
-          Expanded(flex: 3, child: new AddButton(page: widget.page))
+          Expanded(flex: 3, child: AddButton(page: widget.page))
         ]));
   }
 }

@@ -8,11 +8,11 @@ class FormAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text("Agregar una transacción",
+      title: const Text("Agregar una transacción",
           style: TextStyle(fontSize: 19, color: Colors.white)),
       centerTitle: true,
-      backgroundColor: Color(0xff073B3A),
-      iconTheme: IconThemeData(color: Colors.white),
+      backgroundColor: const Color(0xff073B3A),
+      iconTheme: const IconThemeData(color: Colors.white),
     );
   }
 }

@@ -4,7 +4,6 @@ import 'package:client_chankuap/src/Widgets/CustomAlertDialog.dart';
 import 'package:client_chankuap/src/Widgets/app_icons.dart';
 import 'package:client_chankuap/src/Widgets/data_object.dart';
 import 'package:client_chankuap/src/forms/entradas/entrada_form.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
@@ -22,6 +21,7 @@ class Entrada extends StatefulWidget {
 
 class _EntradaState extends State<Entrada> {
   late EntradaOverview trans;
+  late EntradaTrans entradaTrans;
 
   void initState() {
     _getEntradas().then((value) => {
@@ -35,19 +35,19 @@ class _EntradaState extends State<Entrada> {
 
   @override
   Widget build(BuildContext context) {
-    return new Container(
-        color: Color(0xffEFEFEF),
+    return Container(
+        color: const Color(0xffEFEFEF),
         child: Column(
           children: <Widget>[
             AddBar(
-                icon: Icon(AppIcons.entry, color: Color(0xff073B3A)),
+                icon: const Icon(AppIcons.entry, color: Color(0xff073B3A)),
                 title: "Entrada de Mercaderia",
                 page: 1),
             Expanded(
               child: ListView.builder(
                   itemCount: entradas.length,
                   scrollDirection: Axis.vertical,
-                  padding: EdgeInsets.all(5.0),
+                  padding: const EdgeInsets.all(5.0),
                   itemBuilder: (context, index) =>
                       _buildListItem(context, index)),
             ),
@@ -59,49 +59,49 @@ class _EntradaState extends State<Entrada> {
     return InkWell(
         child: Container(
             height: 70,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.all(Radius.circular(10))),
-            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             child: Stack(children: [
               Align(
-                  alignment: Alignment(-0.8, -0.5),
-                  child: Text('${entradas[index].username}', //${entradas[index].usario}
-                    style: TextStyle(
+                  alignment: const Alignment(-0.8, -0.5),
+                  child: Text(entradas[index].nombre_cliente, //${entradas[index].usario}
+                    style: const TextStyle(
                         color: Color(0xff073B3A),
                         fontWeight: FontWeight.bold,
                         fontSize: 16),
                   )
               ),
-              Align(
+              const Align(
                   alignment: Alignment(-0.8, 0.5),
-                  child: Text('Cedula', //${entradas[index].provider_id}
+                  child: Text('Nombre', //${entradas[index].provider_id}
                       style: TextStyle(
                           color: Color(0xff073B3A),
                           fontStyle: FontStyle.italic,
                           fontSize: 16))),
               Align(
-                  alignment: Alignment(0.35, 0),
+                  alignment: const Alignment(0.35, 0),
                   child: Text('${entradas[index].date}',
-                      style: TextStyle(
-                        color: Color(0xff073B3A),
+                      style: const TextStyle(
+                        color: const Color(0xff073B3A),
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ))),
               Align(
-                alignment: Alignment(0.9, 0),
+                alignment: const Alignment(0.9, 0),
                 child: Text('${entradas[index].trans_id}',
-                    style: TextStyle(
-                        color: Color(0xff073B3A),
+                    style: const TextStyle(
+                        color: const Color(0xff073B3A),
                         fontWeight: FontWeight.bold,
                         fontSize: 16)),
               ),
               Align(
-                  alignment: Alignment(0.8, 0),
+                  alignment: const Alignment(0.8, 0),
                   child:  IconButton(
                       iconSize: 20,
-                      icon: Icon(Icons.do_disturb_on_outlined),
-                      color: Color(0xff9F4A54),
+                      icon: const Icon(Icons.do_disturb_on_outlined),
+                      color: const Color(0xff9F4A54),
                       onPressed: () {
                         var dialog = CustomAlertDialog(
                           title: "Eliminar la transacción",
@@ -112,7 +112,6 @@ class _EntradaState extends State<Entrada> {
                           positiveBtnText: 'Si',
                           negativeBtnText: 'No',
                         );
-                        // var dialog = new Container();
                         showDialog(
                             context: context,
                             builder: (BuildContext context) => dialog
@@ -125,10 +124,15 @@ class _EntradaState extends State<Entrada> {
               this.trans = value;
             })
           });
+          await _getEntradaTrans(entradas[index].trans_id).then((value) => {
+            setState(() {
+              this.entradaTrans = value;
+            })
+          });
           Navigator.push(
             context,
-            new MaterialPageRoute(
-                builder: (context) => new EntradaForm(trans: trans)),
+            MaterialPageRoute(
+                builder: (context) => EntradaForm(trans: trans, entradaTrans: this.entradaTrans,)),
           );
         });
   }
@@ -145,6 +149,27 @@ class _EntradaState extends State<Entrada> {
         Map<String, dynamic> body = json.decode(uriResponse.body);
 
         return EntradaOverview.fromJson(body);
+
+      } else {
+        throw Exception('Failed to load album');
+      }
+    } finally {
+      client.close();
+    }
+  }
+
+  Future<EntradaTrans> _getEntradaTrans(int id) async {
+    var client = http.Client();
+    var url = 'https://wakerakka.herokuapp.com/';
+    var endpoint = 'transactions/in/${id}';
+
+    try {
+      var uriResponse = await client.get(Uri.parse(url + endpoint));
+
+      if (uriResponse.statusCode == 200) {
+        Map<String, dynamic> body = json.decode(uriResponse.body);
+
+        return EntradaTrans.fromJson(body);
 
       } else {
         throw Exception('Failed to load album');

@@ -27,13 +27,10 @@ class _TransactionState extends State<Transactions> {
     switch (page) {
       case 0:
         return _entrada;
-        break;
       case 1:
         return _salida;
-        break;
       default:
         return _entrada;
-        break;
     }
   }
 
@@ -45,9 +42,9 @@ class _TransactionState extends State<Transactions> {
               preferredSize: const Size.fromHeight(60),
               child: TransactionAppBar(_title),
             ),
-            drawer: new Drawer(
+            drawer: Drawer(
               child: Container(
-                  color: Color(0xffEFEFEF),
+                  color: const Color(0xffEFEFEF),
                   child: ListView(
                       children: <Widget>[
                         drawerHeader(),

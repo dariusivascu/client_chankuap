@@ -49,7 +49,7 @@ class _ProductListFormState extends State<ProductListForm> {
       itemBuilder: (BuildContext context, int index) {
         return Container(
           height: 60,
-          color: Color(0xffEFEFEF),
+          color: const Color(0xffEFEFEF),
           child: _buildProductBox(context, index),
         );
       },
@@ -77,7 +77,7 @@ class _ProductListFormState extends State<ProductListForm> {
   Widget _buildProductBox(BuildContext context, int index) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white, border: Border.all(color: Color(0xff073B3A))),
+          color: Colors.white, border: Border.all(color: const Color(0xff073B3A))),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
         child: Row(
@@ -96,35 +96,37 @@ class _ProductListFormState extends State<ProductListForm> {
                           .materiasPrimas[index]
                           .name,
                       textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      'Precio:',
+                      context
+                          .watch<MateriasProvider>()
+                          .materiasPrimas[index].organico,
                       textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                     )
                   ],
                 ),
               ),
               Flexible(
-                flex: 2,
+                flex: 3,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       ' ${context.watch<MateriasProvider>().materiasPrimas[index].cantidad} ' +
-                          ' ${_intToUnidad(context.watch<MateriasProvider>().materiasPrimas[index].unidad as int)}',
+                          ' ${_intToUnidad(context.watch<MateriasProvider>().materiasPrimas[index].unidad)}',
                       textAlign: TextAlign.right,
                       style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                     Text(
-                      '${context.watch<MateriasProvider>().materiasPrimas[index].precio}\$',
+                      'Precio: ${context.watch<MateriasProvider>().materiasPrimas[index].precio}\$',
                       textAlign: TextAlign.right,
                       style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     )
                   ],
                 ),
@@ -133,7 +135,7 @@ class _ProductListFormState extends State<ProductListForm> {
                 flex: 1,
                 child: IconButton(
                   iconSize: 20,
-                  icon: Icon(Icons.do_not_disturb_on_outlined),
+                  icon: const Icon(Icons.do_not_disturb_on_outlined),
                   onPressed: () {
                     setState(() {
                       context

@@ -1,6 +1,5 @@
 import 'package:client_chankuap/src/Widgets/TransactionType.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:intl/intl.dart';
 
 @JsonSerializable()
 class EntradaTrans {
@@ -9,30 +8,37 @@ class EntradaTrans {
   final int quien;
   final String productor;
   final String p_code;
-  final int ID;
+  final String ID;
   final String comunidad;
-  final String transporte;
+  final String zona;
   final List<Producto> lotes;
 
+
+
   EntradaTrans(this.fecha_uno, this.fecha_dos, this.quien, this.productor,
-      this.p_code, this.ID, this.comunidad, this.transporte, this.lotes);
+      this.p_code, this.ID, this.comunidad, this.zona, this.lotes);
 
   EntradaTrans.fromJson(Map<String, dynamic> json)
       : fecha_uno = json['date'],
-        fecha_dos = json['fecha-2'],
-        quien = json['username'],
+        fecha_dos = json['fecha2'],
+        quien = json['quien'],
         ID = json['PROVIDER_ID'],
-        comunidad = json['communidad'],
+        comunidad = json['comunidad'],
         productor = json['productor'],
         p_code = json['p_code'],
-        transporte = json['transporte'],
+        zona = json['zona'],
         lotes = json['products'].map((e) => Producto.fromJson(e)).toList().cast<Producto>();
 
   Map<String, dynamic> toJson() => {
     "date": fecha_uno,
-    "username": quien,
+    "fecha2": fecha_dos,
+    "quien": quien,
     "PROVIDER_ID": ID,
     "products": lotes.map((e) => e.toJson()).toList(),
+    "comunidad": comunidad,
+    "productor": productor,
+    "p_code": p_code,
+    "zona": zona,
   };
 }
 
@@ -40,25 +46,27 @@ class EntradaTrans {
 class SalidaTrans {
   final String cliente;
   final int quien;
-  final String transporte;
   final String fecha_uno;
   final String fecha_dos;
+  final String ciudad;
   final List<Producto> lotes;
 
-  SalidaTrans(this.cliente, this.quien, this.transporte, this.fecha_uno, this.fecha_dos, this.lotes);
+  SalidaTrans(this.cliente, this.quien, this.fecha_uno, this.fecha_dos, this.ciudad, this.lotes);
 
   SalidaTrans.fromJson(Map<String, dynamic> json)
       : fecha_uno = json['date'],
-        fecha_dos = json['fecha-2'],
-        quien = json['username'],
-        transporte = json['transporte'],
+        fecha_dos = json['fecha2'],
+        quien = json['quien'],
         cliente = json['cliente'],
+        ciudad = json['ciudad'],
         lotes = json['products'].map((e) => Producto.fromJson(e)).toList().cast<Producto>();
 
   Map<String, dynamic> toJson() => {
     "date": fecha_uno,
-    "username": quien,
+    "fecha2": fecha_dos,
+    "quien": quien,
     "cliente": cliente,
+    "ciudad": ciudad,
     "products": lotes.map((e) => e.toJson()).toList(),
   };
 }
@@ -67,40 +75,35 @@ class Producto {
   final int id;
   final double cantidad;
   final int unidad;
-  final int precio;
+  final double precio;
   final String organico;
-  final String comunidad;
   final String comb_id;
   final String name;
-  final String bodega;
 
   List<Map<String, dynamic>> ListProducts = [];
 
   Producto(this.id, this.name,
-      this.cantidad, this.unidad, this.precio, this.organico, this.comunidad):
-        this.comb_id = 'M',
-        this.bodega = 'B01';
+      this.cantidad, this.unidad, this.precio, this.organico):
+        this.comb_id = 'M';
 
   Producto.fromJson(Map<String, dynamic> json) :
         id = json['PRODUCT_ID'],
         comb_id = json['COMB_ID'],
-        name = json['name'],
+        name = json['Name'],
         cantidad = double.parse(json['quantity'].toString()),
         unidad = json['unit'],
-        precio = json['price'],
-        organico = json['organico'],
-        comunidad = json['comunidad'],
-        bodega = json['bodega'];
+        precio = double.parse(json['price'].toString()),
+        organico = json['organico'];
 
 
   Map<String, dynamic> toJson() => {
     "PRODUCT_ID": id,
     "COMB_ID": 'M',
-    "lote": getNumeroLote(),
     "quantity": cantidad,
+    "Name": name,
     "unit": unidad,
     "price": precio,
-    "bodega": "BO1"
+    "organico": organico,
   };
 
   dynamic toJsonList(List<Producto> listToParse){
@@ -112,10 +115,10 @@ class Producto {
     return ListProducts;
   }
 
-  getNumeroLote() {
-    return '${name}' + '${comunidad}' + '${organico}' + '${id}' + DateFormat(
-        'ddMMyyyy').format(DateTime.now());
-  }
+  // getNumeroLote() {
+  //   return name + comunidad + organico + '$id' + DateFormat(
+  //       'ddMMyyyy').format(DateTime.now());
+  // }
 }
 
 @JsonSerializable()
@@ -138,22 +141,23 @@ class EntradaOverview extends TransactionType {
 
   final int trans_id;
   final String date;
-  final int username;
-  final int provider_id;
+  // final int username;
+  final String provider_id;
+  final String nombre_cliente;
 
   List<Map<String, dynamic>> ListEntradas = [];
 
   EntradaOverview.fromJson(Map<String, dynamic> json) :
         trans_id = json['TRANS_ID'],
         date = json['date'],
-        username = json['username'],
-        provider_id = json['PROVIDER_ID'];
+        provider_id = json['PROVIDER_ID'],
+        nombre_cliente = json['productor'];
 
   Map<String, dynamic> toJson() => {
     "TRANS_ID": trans_id,
     "date": date,
-    "username": username,
-    "PROVIDER_ID": provider_id
+    "PROVIDER_ID": provider_id,
+    "productor": nombre_cliente
   };
 
   dynamic toJsonList(List<EntradaOverview> listToParse){
@@ -165,7 +169,7 @@ class EntradaOverview extends TransactionType {
 
   }
 
-  EntradaOverview(this.trans_id, this.date, this.username, this.provider_id);
+  EntradaOverview(this.trans_id, this.date, this.provider_id, this.nombre_cliente);
 }
 
 
@@ -187,7 +191,6 @@ class ListSalidaOverviews {
 class SalidaOverview extends TransactionType {
 
   final int trans_id;
-  final int username;
   final String cliente;
   final String date;
 
@@ -196,13 +199,11 @@ class SalidaOverview extends TransactionType {
   SalidaOverview.fromJson(Map<String, dynamic> json) :
         trans_id = json['TRANS_OUT_ID'],
         date = json['date'],
-        username = json['username'],
         cliente = json['cliente'];
 
   Map<String, dynamic> toJson() => {
     "TRANS_OUT_ID": trans_id,
     "date": date,
-    "username": username,
     "PROVIDER_ID": cliente
   };
 
@@ -219,7 +220,7 @@ class SalidaOverview extends TransactionType {
     return ListSalidas;
   }
 
-  SalidaOverview(this.trans_id, this.username, this.cliente, this.date);
+  SalidaOverview(this.trans_id, this.cliente, this.date);
 }
 
 

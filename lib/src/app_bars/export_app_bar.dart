@@ -11,12 +11,12 @@ class ExportAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text("$appBarTitle"),
+      title: Text(appBarTitle),
       centerTitle: true,
-      backgroundColor: Color(0xff073B3A),
+      backgroundColor: const Color(0xff073B3A),
       actions: <Widget>[
-        new IconButton(
-            icon: new Icon(Icons.search), onPressed: () => print("search"))
+        IconButton(
+            icon: const Icon(Icons.search), onPressed: () => print("search"))
       ],
     );
   }

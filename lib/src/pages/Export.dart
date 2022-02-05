@@ -243,13 +243,13 @@ class _ExportState extends State<Export> {
                 borderRadius: BorderRadius.all(Radius.circular(10))),
             margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             child: Stack(children: [
-              Align(
-                  alignment: Alignment(-0.8, -0.5),
-                  child: Text('${trans[index].username}',
-                      style: TextStyle(
-                          color: Color(0xff073B3A),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16))),
+              // Align(
+              //     alignment: Alignment(-0.8, -0.5),
+              //     child: Text('${trans[index]}',
+              //         style: TextStyle(
+              //             color: Color(0xff073B3A),
+              //             fontWeight: FontWeight.bold,
+              //             fontSize: 16))),
               Align(
                   alignment: Alignment(-0.8, 0.5),
                   child: Text('Productor Code',
@@ -296,8 +296,11 @@ class _ExportState extends State<Export> {
             context,
             MaterialPageRoute(
                 builder: (context) {
-                  if (tipo == 1) return new EntradaForm(trans: trans[index] as EntradaOverview);
-                  else return new SalidaForm(trans: trans[index] as SalidaOverview);
+                  //TODO FIX generation of ENTRADA/SALIDA FORM
+                  return Container();
+                  // if (tipo == 1) return new EntradaForm(trans: trans[index] as EntradaOverview);
+                  // else
+                  //   return new SalidaForm(trans: trans[index] as SalidaOverview);
                 }),
           );
         });

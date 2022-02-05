@@ -19,6 +19,7 @@ class Salida extends StatefulWidget {
 
 class _Salida extends State<Salida> {
   late SalidaOverview trans;
+  late SalidaTrans salidaTrans;
 
   @override
   void initState() {
@@ -116,12 +117,38 @@ class _Salida extends State<Salida> {
               this.trans = result;
             });
           });
+          await _getSalidaTrans(salidas[index].getId()).then((value) => {
+            setState(() {
+              this.salidaTrans = value;
+            })
+          });
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => new SalidaForm(trans: trans)),
+            MaterialPageRoute(builder: (context) => SalidaForm(trans: trans, salidaTrans: salidaTrans,)),
           );
           setState(() {});
         });
+  }
+
+  Future<SalidaTrans> _getSalidaTrans(int id) async {
+    var client = http.Client();
+    var url = 'https://wakerakka.herokuapp.com/';
+    var endpoint = 'transactions/out/${id}';
+
+    try {
+      var uriResponse = await client.get(Uri.parse(url + endpoint));
+      print(endpoint);
+
+      if (uriResponse.statusCode == 200) {
+        Map<String, dynamic> body = json.decode(uriResponse.body);
+
+        return SalidaTrans.fromJson(body);
+      } else {
+        throw Exception('Failed to load album');
+      }
+    } finally {
+      client.close();
+    }
   }
 
   Future<SalidaOverview> _getSalida(int id) async {
@@ -186,6 +213,7 @@ class _Salida extends State<Salida> {
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
+        print(uriResponse.statusCode);
         throw Exception('Failed to load album');
       }
     } finally {
